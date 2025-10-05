@@ -8,11 +8,12 @@ import com.mongodb.client.MongoDatabase;
 public class MongoDBConnection {
 
 
-    // Variáveis de configuração
-    private static final String USERNAME = "aluno";
-    private static final String PASSWORD = "BN10UNhMxMDZUgEh";
-    private static final String CLUSTER_URL = "cluster0.brbyr.mongodb.net"; // Substitua pelo seu cluster se for diferente
-    private static final String DATABASE_NAME = "Cluster0"; // Substitua pelo nome do seu banco de dados
+    // Variáveis de configuração para MongoDB Local
+    private static final String USERNAME = "admin";
+    private static final String PASSWORD = "admin";
+    private static final String HOST = "127.0.0.1";
+    private static final String PORT = "27017";
+    private static final String DATABASE_NAME = "cursojava";
 
 
     private MongoClient mongoClient;
@@ -21,8 +22,9 @@ public class MongoDBConnection {
 
     public MongoDBConnection() {
         try {
-            // String de conexão com credenciais
-            String connectionString = String.format("mongodb+srv://"+USERNAME+":"+PASSWORD+"@"+CLUSTER_URL+"/?retryWrites=true&w=majority&appName="+DATABASE_NAME);
+            // String de conexão para MongoDB local com autenticação
+            String connectionString = String.format("mongodb://%s:%s@%s:%s/%s?authSource=admin",
+                USERNAME, PASSWORD, HOST, PORT, DATABASE_NAME);
 
 
             // Configuração do cliente MongoDB
