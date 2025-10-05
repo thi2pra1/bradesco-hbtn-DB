@@ -1,0 +1,149 @@
+package entities;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "aluno")
+public class Aluno {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "nome", nullable = false, length = 100)
+    private String nome;
+
+    @Column(name = "email", nullable = false, length = 100)
+    private String email;
+
+    @Column(name = "cpf", nullable = false, length = 11, unique = true)
+    private String cpf;
+
+    @Column(name = "data_nascimento")
+    private LocalDate dataNascimento;
+
+    @Column(name = "matricula", unique = true, length = 20)
+    private String matricula;
+
+    // Um aluno pode ter um ou mais endereços
+    @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Endereco> enderecos = new ArrayList<>();
+
+    // Um aluno pode ter um ou mais telefones
+    @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Telefone> telefones = new ArrayList<>();
+
+    // Um curso pode ter um ou mais alunos (many-to-many)
+    @ManyToMany(mappedBy = "alunos")
+    private List<Curso> cursos = new ArrayList<>();
+
+    // Constructors
+    public Aluno() {}
+
+    public Aluno(String nome, String email, String cpf, LocalDate dataNascimento, String matricula) {
+        this.nome = nome;
+        this.email = email;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.matricula = matricula;
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public List<Endereco> getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(List<Endereco> enderecos) {
+        this.enderecos = enderecos;
+    }
+
+    public List<Telefone> getTelefones() {
+        return telefones;
+    }
+
+    public void setTelefones(List<Telefone> telefones) {
+        this.telefones = telefones;
+    }
+
+    public List<Curso> getCursos() {
+        return cursos;
+    }
+
+    public void setCursos(List<Curso> cursos) {
+        this.cursos = cursos;
+    }
+
+    // Helper methods
+    public void addEndereco(Endereco endereco) {
+        enderecos.add(endereco);
+        endereco.setAluno(this);
+    }
+
+    public void addTelefone(Telefone telefone) {
+        telefones.add(telefone);
+        telefone.setAluno(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Aluno{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", email='" + email + '\'' +
+                ", cpf='" + cpf + '\'' +
+                ", dataNascimento=" + dataNascimento +
+                ", matricula='" + matricula + '\'' +
+                '}';
+    }
+}
